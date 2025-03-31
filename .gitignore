@@ -35,3 +35,12 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### 깃 ###
+*.log
+logs/
+src/main/resources/application-prod.yml

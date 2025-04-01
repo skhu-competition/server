@@ -1,4 +1,6 @@
 package server.user.api.dto.request;
 
-public record UserLogInReqDto() {
+public record UserLogInReqDto(
+        String email
+) {
 }

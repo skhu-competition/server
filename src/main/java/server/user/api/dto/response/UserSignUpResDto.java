@@ -1,4 +1,10 @@
 package server.user.api.dto.response;
 
-public record UserSignUpResDto() {
+import lombok.Builder;
+
+@Builder
+public record UserSignUpResDto(
+        String accessToken,
+        String refreshToken
+) {
 }

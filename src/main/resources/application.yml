@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: prod
 
   datasource:
     url: ${spring.datasource.url}
@@ -27,8 +25,9 @@ spring:
 
   kakao:
     client_id: ${kakao.client_id}
-    redirect_uri: ${kakao.redirect_uri}
+    redirect_uri: http://localhost:8080/test
 
   jwt:
     secret: ${jwt.secret}
     access-token-validity-in-milliseconds: ${jwt.access-token-validity-in-milliseconds}
+    refresh-token-validity-in-milliseconds: ${jwt.refresh-token-validity-in-milliseconds}

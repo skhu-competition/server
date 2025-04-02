@@ -32,7 +32,7 @@ public class SecurityConfig {
                                 "/login/**",                // 로그인 경로 허용
                                 "/swagger-ui/**",           // Swagger UI 허용
                                 "/v3/api-docs/**",          // Swagger 문서 허용
-                                "/",                        // 루트 경로 허용 (필요시)
+                                "/**",                        // 루트 경로 허용 (필요시)
                                 "/public/**"                // 그 외 공개용 API 경로들
                         ).permitAll()
                         // .requestMatchers().hasRole("ADMIN") // 관리자만 해당 URL에 접근 가능

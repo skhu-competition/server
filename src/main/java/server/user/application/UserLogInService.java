@@ -72,7 +72,7 @@ public class UserLogInService {
         String accessToken = tokenProvider.createAccessToken(user);
         String refreshToken = tokenProvider.createRefreshToken(user);
 
-        userRefreshTokenRepository.deleteByUser(user);
+        userRefreshTokenRepository.deleteByUserImmediate(user);
         userRefreshTokenRepository.save(
                 new UserRefreshToken(null, refreshToken, user)
         );

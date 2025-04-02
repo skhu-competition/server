@@ -25,7 +25,7 @@ spring:
 
   kakao:
     client_id: ${kakao.client_id}
-    redirect_uri: http://localhost:8080/test
+    redirect_uri: http://nowskhu.duckdns.org/auth/kakao
 
   jwt:
     secret: ${jwt.secret}

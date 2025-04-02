@@ -5,8 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.global.jwt.TokenProvider;
-import server.global.jwt.dto.RefreshAccessTokenDto;
-import server.user.api.dto.request.UserLogInReqDto;
+import server.user.api.dto.request.UserInfo;
 import server.user.api.dto.response.UserLogInResDto;
 import server.user.domain.User;
 import server.user.domain.UserRefreshToken;
@@ -22,7 +21,7 @@ public class UserLogInService {
     private final TokenProvider tokenProvider;
     private final TokenRefreshService tokenRefreshService;
 
-    @Transactional
+    /*@Transactional
     public UserLogInResDto logIn(UserLogInReqDto request) {
         // 이메일로 사용자 조회
         User user = userRepository.findByEmail(request.email())
@@ -55,5 +54,32 @@ public class UserLogInService {
                 .build();
 
         return userLogInResDto;
+    }*/
+
+    @Transactional
+    public UserLogInResDto loginByKakao(UserInfo userInfo) {
+        String email = userInfo.email();
+
+        User user = userRepository.findByEmail(email)
+                .orElseGet(() -> userRepository.save(
+                        User.builder()
+                                .email(email)
+                                .name(userInfo.nickname())
+                                .profileImage(userInfo.profileImageUrl())
+                                .build()
+                ));
+
+        String accessToken = tokenProvider.createAccessToken(user);
+        String refreshToken = tokenProvider.createRefreshToken(user);
+
+        userRefreshTokenRepository.deleteByUser(user);
+        userRefreshTokenRepository.save(
+                new UserRefreshToken(null, refreshToken, user)
+        );
+
+        return UserLogInResDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }

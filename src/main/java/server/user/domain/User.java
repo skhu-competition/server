@@ -24,13 +24,6 @@ public class User {
     @Column(name = "USER_NAME", length = 20, nullable = false)
     private String name;
 
-    @Column(name = "NICKNAME", length = 20, nullable = false)
-    private String nickname;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "USER_GENDER", nullable = false)
-    private Gender gender;
-
     @Column(name = "USER_IMAGE")
     private String profileImage;
 
@@ -44,12 +37,10 @@ public class User {
 
 
     @Builder
-    public User(Long userId, String email, String name, String nickname, Gender gender, String profileImage) {
+    public User(Long userId, String email, String name, String profileImage) {
         this.userId = userId;
         this.email = email;
         this.name = name;
-        this.nickname = nickname;
-        this.gender = gender;
         this.profileImage = profileImage;
     }
 

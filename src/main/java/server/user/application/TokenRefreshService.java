@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.global.exception.CustomException;
 import server.global.jwt.TokenProvider;
 import server.global.jwt.dto.RefreshAccessTokenDto;
 import server.global.jwt.dto.RefreshTokenParseDto;

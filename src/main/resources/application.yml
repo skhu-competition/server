@@ -6,6 +6,7 @@ spring:
     url: ${spring.datasource.url}
     username: ${spring.datasource.username}
     password: ${spring.datasource.password}
+
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -24,10 +25,16 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
+---
 
   kakao:
     client_id: ${kakao.client_id}
     redirect_uri: ${kakao.redirect_uri}
+
+  google:
+    client-id: ${GOOGLE_CLIENT_ID}
+    client-secret: ${GOOGLE_CLIENT_SECRET}
+    redirect-uri: ${GOOGLE_REDIRECT_URI}
 
   jwt:
     secret: ${jwt.secret}

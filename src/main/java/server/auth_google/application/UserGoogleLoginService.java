@@ -92,7 +92,6 @@ public class UserGoogleLoginService {
     public String exchangeAuthCodeForAccessToken(String code) {
         RestTemplate restTemplate = new RestTemplate();
 
-        // 1) HTTP Body 설정 (x-www-form-urlencoded)
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -105,7 +104,6 @@ public class UserGoogleLoginService {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
-        // 2) Google OAuth Token Endpoint에 POST 요청
         ResponseEntity<String> response = restTemplate.postForEntity(
                 "https://oauth2.googleapis.com/token",
                 request,

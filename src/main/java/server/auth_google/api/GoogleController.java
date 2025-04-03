@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.auth_google.api.dto.request.GoogleAccesToken;
 import server.auth_google.api.dto.response.GoogleTokenDto;
 import server.auth_google.application.UserGoogleLoginService;
 
@@ -17,9 +16,9 @@ import server.auth_google.application.UserGoogleLoginService;
 public class GoogleController{
     private final UserGoogleLoginService userGoogleLoginService;
 
-    @PostMapping("/login")
-    public ResponseEntity<GoogleTokenDto> googleLogin(@RequestBody GoogleAccesToken request) {
-        GoogleTokenDto googleTokenDto = userGoogleLoginService.loginOrSignUp(request);
+    @GetMapping("/login")
+    public ResponseEntity<GoogleTokenDto> googleLogin(@RequestParam(name = "code") String code) {
+        GoogleTokenDto googleTokenDto = userGoogleLoginService.loginOrSignUp(code);
         System.out.println("구글 로그인 성공~>_<");
         return ResponseEntity.ok(googleTokenDto);
     }

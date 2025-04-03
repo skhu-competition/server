@@ -1,30 +1,50 @@
 package server.auth_google.application;
 
 import com.google.gson.Gson;
-import lombok.RequiredArgsConstructor;
+import com.google.gson.JsonObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import server.auth_google.api.dto.GoogleMappingUserDto;
-import server.auth_google.api.dto.request.GoogleAccesToken;
 import server.auth_google.api.dto.response.GoogleTokenDto;
 import server.global.jwt.TokenProvider;
 import server.user.domain.User;
 import server.user.domain.repository.UserRepository;
 
 @Service
-@RequiredArgsConstructor
 public class UserGoogleLoginService {
 
+    @Autowired
     private final UserRepository userRepository;
+    @Autowired
     private final TokenProvider tokenProvider;
 
-    private static final String GOOGLE_USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo";
+    private final String GOOGLE_CLIENT_ID;
+    private final String GOOGLE_CLIENT_SECRET;
+    private final String GOOGLE_REDIRECT_URI;
+
+    private static final String GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo";
+
+    public UserGoogleLoginService(UserRepository userRepository, TokenProvider tokenProvider,
+                                  @Value("${oauth.google.client-id}") String clientId,
+                                  @Value("${oauth.google.client-secret}") String clientSecret,
+                                  @Value("${oauth.google.redirect-uri") String redirectUri) {
+        this.userRepository = userRepository;
+        this.tokenProvider = tokenProvider;
+        this.GOOGLE_CLIENT_ID = clientId;
+        this.GOOGLE_CLIENT_SECRET = clientSecret;
+        this.GOOGLE_REDIRECT_URI = redirectUri;
+    }
 
     @Transactional
-    public GoogleTokenDto loginOrSignUp(GoogleAccesToken googleAccesToken) {
-        GoogleMappingUserDto googleUser = getGoogleUserInfo(googleAccesToken.getAccessToken());
+    public GoogleTokenDto loginOrSignUp(String code) {
+        String googleAccesstoken = exchangeAuthCodeForAccessToken(code);
+        GoogleMappingUserDto googleUser = getGoogleUserInfo(googleAccesstoken);
 
         User user = userRepository.findByEmail(googleUser.getEmail())
                 .orElseGet(() -> {
@@ -50,7 +70,6 @@ public class UserGoogleLoginService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
-        headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
@@ -68,5 +87,39 @@ public class UserGoogleLoginService {
         }
 
         throw new RuntimeException("구글 사용자 정보를 가져오는 데 실패했습니다.");
+    }
+
+    public String exchangeAuthCodeForAccessToken(String code) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        // 1) HTTP Body 설정 (x-www-form-urlencoded)
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("code", code);
+        params.add("client_id", GOOGLE_CLIENT_ID);
+        params.add("client_secret", GOOGLE_CLIENT_SECRET);
+        params.add("redirect_uri", GOOGLE_REDIRECT_URI);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+
+        // 2) Google OAuth Token Endpoint에 POST 요청
+        ResponseEntity<String> response = restTemplate.postForEntity(
+                "https://oauth2.googleapis.com/token",
+                request,
+                String.class
+        );
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            // 3) JSON에서 access_token 추출
+            //    (이 예시에선 Gson이나 Jackson 등을 사용)
+            Gson gson = new Gson();
+            JsonObject jsonObj = gson.fromJson(response.getBody(), JsonObject.class);
+            return jsonObj.get("access_token").getAsString();
+        } else {
+            throw new RuntimeException("구글 OAuth 토큰 교환에 실패했습니다. " + response.getStatusCode());
+        }
     }
 }

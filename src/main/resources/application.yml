@@ -26,7 +26,7 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 ---
-
+oauth:
   kakao:
     client_id: ${kakao.client_id}
     redirect_uri: ${kakao.redirect_uri}
@@ -36,6 +36,6 @@ spring:
     client-secret: ${GOOGLE_CLIENT_SECRET}
     redirect-uri: ${GOOGLE_REDIRECT_URI}
 
-  jwt:
-    secret: ${jwt.secret}
-    access-token-validity-in-milliseconds: ${jwt.access-token-validity-in-milliseconds}
+jwt:
+  secret: ${jwt.secret}
+  access-token-validity-in-milliseconds: ${jwt.access-token-validity-in-milliseconds}

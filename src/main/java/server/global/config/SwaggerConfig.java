@@ -12,7 +12,7 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .addServersItem(new Server().url("https://nowskhu.duckdns")) // 도메인주소 입력할 것
+                .addServersItem(new Server().url("https://nowskhu.zapto.org")) // 도메인주소 입력할 것
                 .info(new Info().title("Nowskhu API")
                         .description("API documentation for nowskhu")
                         .version("v1.0.0"));

@@ -28,17 +28,18 @@ public class TokenProvider {
     private final long accessTokenValidityTime; // 액세스 토큰의 유효 시간 정의
     private final long refreshTokenValidityTime;
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Autowired
     public TokenProvider(@Value("${jwt.secret}") String secretKey,
                          @Value("${jwt.access-token-validity-in-milliseconds}") long accessTokenValidityTime,
-                         @Value("${jwt.refresh-token-validity-in-milliseconds}") long refreshTokenValidityTime) {
+                         @Value("${jwt.refresh-token-validity-in-milliseconds}") long refreshTokenValidityTime,
+                         CustomUserDetailsService customUserDetailsService) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);    // secretKey를 Base64 디코딩
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenValidityTime = accessTokenValidityTime;
         this.refreshTokenValidityTime = refreshTokenValidityTime;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     public String createAccessToken(User user) {
@@ -67,10 +68,10 @@ public class TokenProvider {
                 .compact();
     }
 
-    // 토큰에서 인증 정보 추출
     public Authentication getAuthentication(String token) {
         String userPk = getUserPk(token);
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(userPk);
+
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 

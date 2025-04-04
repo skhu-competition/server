@@ -9,6 +9,7 @@ import server.placeReview.api.response.PlaceReviewListResDto;
 import server.placeReview.api.response.PlaceReviewResDto;
 import server.placeReview.application.PlaceReviewService;
 import server.user.domain.User;
+import server.user.domain.UserPrincipal;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,10 +22,10 @@ public class PlaceReviewController {
     @PostMapping("/{placeId}/review")
     public PlaceReviewResDto reviewSave(
             @PathVariable Long placeId,
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody PlaceReviewReqDto dto
     ) {
-        return placeReviewService.reviewSave(user.getUserId(), placeId, dto);
+        return placeReviewService.reviewSave(userPrincipal.getUser().getUserId(), placeId, dto);
     }
 
     // 후기 조회 (장소 기준 전체 조회)
@@ -39,18 +40,18 @@ public class PlaceReviewController {
     @PatchMapping("/review/{reviewId}")
     public PlaceReviewResDto updateReview(
             @PathVariable Long reviewId,
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody PlaceReviewUpdateReqDto dto
     ) {
-        return placeReviewService.updateReview(reviewId, user.getUserId(), dto);
+        return placeReviewService.updateReview(reviewId, userPrincipal.getUser().getUserId(), dto);
     }
 
     // 후기 삭제
     @DeleteMapping("/review/{reviewId}")
     public void deleteReview(
             @PathVariable Long reviewId,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        placeReviewService.deleteReview(reviewId, user.getUserId());
+        placeReviewService.deleteReview(reviewId, userPrincipal.getUser().getUserId());
     }
 }

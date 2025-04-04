@@ -33,7 +33,7 @@ public class PlaceService {
                 // 예시입니다.
                 "앤드아워",
                 "스시민",
-                "곱창시대"
+                "곱창시대 인천"
         );
 
         for (String address : addressList) {

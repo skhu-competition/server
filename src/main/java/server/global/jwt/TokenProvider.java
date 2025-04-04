@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import server.user.application.CustomUserDetailsService;
 import server.user.domain.User;
 
 import java.security.Key;
@@ -25,6 +27,9 @@ public class TokenProvider {
     private final Key key; // jwt 서명을 위한 비밀 키. 토큰을 생성하고 검증할 때 사용
     private final long accessTokenValidityTime; // 액세스 토큰의 유효 시간 정의
     private final long refreshTokenValidityTime;
+
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
     public TokenProvider(@Value("${jwt.secret}") String secretKey,
@@ -63,12 +68,19 @@ public class TokenProvider {
     }
 
     // 토큰에서 인증 정보 추출
-    public Authentication getAuthentication(String accessToken) {
-        Claims claims = parseClaims(accessToken); // 토큰을 파싱하여 클레임 추출
+    public Authentication getAuthentication(String token) {
+        String userPk = getUserPk(token);
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userPk);
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
 
-        return new UsernamePasswordAuthenticationToken(claims.getSubject(), "", List.of());
-        // 위 객체는 사용자가 인증되었음을 나타내며, 이 객체를 인증 정보로 사용함.
-        // 이 객체를 통해 사용자의 권한을 확인하고, 사용자가 요청할 수 있는 리소스에 접근할 수 있도록 함.
+    private String getUserPk(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
     // HTTP 요청에서 토큰 추출(Bearer 라는 접두사 제거하고 실제 토큰 반환)

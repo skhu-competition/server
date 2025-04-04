@@ -14,8 +14,8 @@ spring:
     show-sql: true
     properties:
       hibernate:
-      format_sql: false
-      use_sql_comments: true
+        format_sql: false
+        use_sql_comments: true
 
   servlet:
     multipart:
@@ -26,6 +26,10 @@ spring:
   kakao:
     client_id: ${kakao.client_id}
     redirect_uri: http://localhost:8080/auth/kakao
+
+  naver:
+    client_id: ${naver.client_id}
+    secret: ${naver.secret}
 
   jwt:
     secret: ${jwt.secret}

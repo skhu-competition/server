@@ -31,9 +31,9 @@ public class UserGoogleLoginService {
     private static final String GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo";
 
     public UserGoogleLoginService(UserRepository userRepository, TokenProvider tokenProvider,
-                                  @Value("${oauth.google.client-id}") String clientId,
-                                  @Value("${oauth.google.client-secret}") String clientSecret,
-                                  @Value("${oauth.google.redirect-uri") String redirectUri) {
+                                  @Value("${spring.google.client-id}") String clientId,
+                                  @Value("${spring.google.client-secret}") String clientSecret,
+                                  @Value("${spring.google.redirect-uri}") String redirectUri) {
         this.userRepository = userRepository;
         this.tokenProvider = tokenProvider;
         this.GOOGLE_CLIENT_ID = clientId;

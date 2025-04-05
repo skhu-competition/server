@@ -55,8 +55,8 @@ public class PlaceService {
                         .name(stripHtml(item.getTitle()))
                         .address(item.getRoadAddress())
                         .description(item.getDescription())
-                        .mapx(Double.parseDouble(item.getMapx()))
-                        .mapy(Double.parseDouble(item.getMapy()))
+                        .mapx(Double.parseDouble(item.getMapx())/10000000)
+                        .mapy(Double.parseDouble(item.getMapy())/10000000)
                         .build();
 
                 placeRepository.save(place);

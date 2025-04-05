@@ -38,5 +38,19 @@ spring:
 
   jwt:
     secret: ${jwt.secret}
+    access-token-validity-in-milliseconds: ${jwt.access-token-validity-in-milliseconds}
+    refresh-token-validity-in-milliseconds: ${jwt.refresh-token-validity-in-milliseconds}
+
+  aws:
+    s3:
+      bucket: ${S3.BURCKET_NAME}
+      credentials:
+        access-key: ${S3.ACCESS_KEY}
+        secret-key: ${S3.SECRET_KEY}
+      region:
+        static: ap-northeast-2
+        auto: false
+      stack:
+        auto: false
     access-token-validity-in-milliseconds: ${JWT_ACCESS_TOKEN_VALIDITY_IN_MILLISECONDS}
     refresh-token-validity-in-milliseconds: ${JWT_REFRESH_TOKEN_VALIDITY_IN_MILLISECONDS}

@@ -20,7 +20,6 @@ public class SwaggerConfig {
                 .addServersItem(new Server().url("https://nowskhu.zapto.org")) // 도메인주소 입력할 것
                 .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
 
-                // ✅ 토큰 기반 인증 방식(Bearer JWT)을 Swagger에 설명하는 보안 스키마 추가
                 .components(new Components()
                         .addSecuritySchemes(SECURITY_SCHEME_NAME,
                                 new SecurityScheme()

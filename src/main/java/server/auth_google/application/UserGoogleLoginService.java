@@ -26,7 +26,7 @@ public class UserGoogleLoginService {
 
     private final String GOOGLE_CLIENT_ID;
     private final String GOOGLE_CLIENT_SECRET;
-    private final String GOOGLE_REDIRECT_URI;
+    private final String GOOGLE_REDIRECT_URI; // 환경변수 나중에 배포 주소로 변경해야함
 
     private static final String GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo";
 
@@ -100,7 +100,7 @@ public class UserGoogleLoginService {
         params.add("code", code);
         params.add("client_id", GOOGLE_CLIENT_ID);
         params.add("client_secret", GOOGLE_CLIENT_SECRET);
-        params.add("redirect_uri", GOOGLE_REDIRECT_URI);
+        params.add("redirect_uri", GOOGLE_REDIRECT_URI); // 환경변수 나중에 배포 주소로 변경해야함
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 

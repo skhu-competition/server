@@ -69,7 +69,7 @@ public class KakaoService {
 
         UserInfo user = UserInfo.builder()
                 .email(userInfo.getKakaoAccount().getEmail())
-                .nickname(userInfo.getKakaoAccount().getProfile().getNickName())
+                .name(userInfo.getKakaoAccount().getProfile().getNickName())
                 .profileImageUrl(userInfo.getKakaoAccount().getProfile().getProfileImageUrl())
                 .build();
 

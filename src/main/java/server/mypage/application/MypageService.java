@@ -37,7 +37,7 @@ public class MypageService {
                 .build();
     }
 
-    //유저 정보 수정
+    /*//유저 정보 수정
     @Transactional
     public UserInfo update(Long userId, UserInfo request) {
         User user = userRepository.findById(userId)
@@ -49,7 +49,7 @@ public class MypageService {
                 .profileImageUrl(user.getProfileImage())
                 .build();
 
-    }
+    }*/
 
     //장소 즐겨찾기
     @Transactional(readOnly = true)

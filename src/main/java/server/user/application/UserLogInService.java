@@ -64,7 +64,7 @@ public class UserLogInService {
                 .orElseGet(() -> userRepository.save(
                         User.builder()
                                 .email(email)
-                                .name(userInfo.nickname())
+                                .name(userInfo.name())
                                 .profileImage(userInfo.profileImageUrl())
                                 .build()
                 ));

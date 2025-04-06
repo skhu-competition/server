@@ -10,9 +10,5 @@ import java.util.List;
 @Builder
 public record MypageResponse(
         String name,
-        String profileImage,
-
-        List<PostResponse> posts,
-        List<PlaceReviewResDto> reviews,
-        List<FavoritePlaceResDto> favorites
+        String profileImage
 ) {}

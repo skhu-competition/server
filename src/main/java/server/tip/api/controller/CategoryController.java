@@ -11,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryController {
 
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     // 카테고리 전체 조회
     @GetMapping

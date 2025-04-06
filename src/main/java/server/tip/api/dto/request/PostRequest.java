@@ -4,7 +4,6 @@ import lombok.Builder;
 
 @Builder
 public record PostRequest(
-        Long postId,
         Long categoryId,
         String title,
         String content,

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import server.favoritePlace.api.response.FavoritePlaceResDto;
 import server.mypage.api.dto.response.MypageResponse;
 import server.mypage.application.MypageService;
+import server.placeReview.api.response.PlaceReviewResDto;
 import server.tip.api.dto.response.PostResponse;
 import server.user.api.dto.request.UserInfo;
 
@@ -41,9 +42,9 @@ public class MypageController {
         return mypageService.getMyPosts(userId);
     }
 
-//    //사용자 후기 조회
-//    @GetMapping("/place/{reviewId}")
-//    public List<PlaceReviewResDto> getMyReviews(@RequestParam Long userId) {
-//        return mypageService.getMyReviews(userId);
-//    }
+    //사용자 후기 조회
+    @GetMapping("/place/{reviewId}")
+    public List<PlaceReviewResDto> getMyReviews(@RequestParam Long userId) {
+        return mypageService.getMyReviews(userId);
+    }
 }

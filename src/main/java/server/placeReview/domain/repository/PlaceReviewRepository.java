@@ -15,4 +15,7 @@ public interface PlaceReviewRepository extends JpaRepository<PlaceReview, Long> 
 
     // 중복 작성 방지
     boolean existsByUser_UserIdAndPlace_Id(Long userId, Long placeId);
+
+    // 특정 유저가 작성한 전체 후기 조회 (마이페이지용)
+    List<PlaceReview> findAllByUser_UserId(Long userId);
 }

@@ -1,9 +1,9 @@
 spring:
 
   datasource:
-    url: ${spring.datasource.url}
-    username: ${spring.datasource.username}
-    password: ${spring.datasource.password}
+    url: ${DB_URL}
+    username: ${DB_NAME}
+    password: ${DB_PW}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -22,21 +22,3 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
-
-  kakao:
-    client_id: ${kakao.client_id}
-    redirect_uri: http://localhost:8080/auth/kakao
-
-  naver:
-    client_id: ${naver.client_id}
-    secret: ${naver.secret}
-
-  google:
-    client-id: ${GOOGLE_CLIENT_ID}
-    client-secret: ${GOOGLE_CLIENT_SECRET}
-    redirect-uri: ${GOOGLE_REDIRECT_URI}
-
-  jwt:
-    secret: ${jwt.secret}
-    access-token-validity-in-milliseconds: ${jwt.access-token-validity-in-milliseconds}
-    refresh-token-validity-in-milliseconds: ${jwt.refresh-token-validity-in-milliseconds}

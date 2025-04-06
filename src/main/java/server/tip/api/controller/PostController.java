@@ -15,12 +15,12 @@ public class PostController {
 
     //게시글 작성
     @PostMapping("/create")
-    public PostResponse createPost(@RequestParam Long userId, @RequestBody PostRequest request) {
+    public PostResponse createPost(@RequestParam("userId") Long userId, @RequestBody PostRequest request) {
         return postService.create(userId, request);
     }
 
-    // 게시글 전체 또는 카테고리별 조회
-    @GetMapping("/read/{categoryId}")
+    // 카테고리별 전체 조회
+    @GetMapping("/{categoryId}")
     public List<PostResponse> getPosts(Long categoryId) {
         if (categoryId != null) {
             return postService.getByCategory(categoryId);
@@ -29,19 +29,19 @@ public class PostController {
     }
 
     // 게시글 상세 조회
-    @GetMapping("/read/{postId}")
+    @GetMapping("/{postId}")
     public PostResponse getPost(@PathVariable Long postId) {
         return postService.getById(postId);
     }
 
     // 게시글 수정
-    @PatchMapping("/update/{postId}")
+    @PatchMapping("/{postId}")
     public PostResponse updatePost(@PathVariable Long postId, @RequestBody PostRequest request) {
         return postService.update(postId, request);
     }
 
     // 게시글 삭제
-    @DeleteMapping("/delete/{postId}")
+    @DeleteMapping("/{postId}")
     public void deletePost(@PathVariable Long postId) {
         postService.delete(postId);
     }

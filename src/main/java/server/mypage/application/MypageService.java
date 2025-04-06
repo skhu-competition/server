@@ -34,6 +34,8 @@ public class MypageService {
         return MypageResponse.builder()
                 .name(user.getName())
                 .profileImage(user.getProfileImage())
+                .email(user.getEmail())
+                .createdAt(user.getCreatedAt().toString())
                 .build();
     }
 
@@ -63,14 +65,13 @@ public class MypageService {
     // 사용자가 직접 작성한 게시글 조회
     @Transactional(readOnly = true)
     public List<PostResponse> getMyPosts(Long userId) {
-        return postRepository.findById(userId).stream()
+        return postRepository.findAllByUser_UserId(userId).stream()
                 .map(p -> PostResponse.builder()
                         .postId(p.getId())
                         .title(p.getTitle())
                         .content(p.getContent())
                         .category(p.getCategory().getName())
                         .image(p.getImage())
-                        .favorite(p.isFavorite())
                         .createdAt(p.getCreatedAt().toString())
                         .updateAt(p.getUpdateAt().toString())
                         .build())

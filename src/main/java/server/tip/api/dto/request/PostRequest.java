@@ -7,6 +7,5 @@ public record PostRequest(
         Long categoryId,
         String title,
         String content,
-        String image,
-        boolean favorite
+        String image
 ) {}

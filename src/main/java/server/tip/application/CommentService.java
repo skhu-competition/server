@@ -22,6 +22,7 @@ public class CommentService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
+    //댓글 생성
     @Transactional
     public CommentResponse create(Long userId, Long postId, CommentRequest request) {
         User user = userRepository.findById(userId).orElseThrow();
@@ -37,6 +38,7 @@ public class CommentService {
         return toResponse(comment);
     }
 
+    //댓글 조회
     @Transactional(readOnly = true)
     public List<CommentResponse> getByPostId(Long postId) {
         return commentRepository.findByPostId(postId).stream()
@@ -44,18 +46,23 @@ public class CommentService {
                 .collect(toList());
     }
 
+    //댓글 수정
     @Transactional
     public CommentResponse update(Long commentId, CommentRequest request) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow();
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글 없음."));
         comment.update(request.content());
         return toResponse(comment);
     }
 
+    //댓글 삭제
     @Transactional
     public void delete(Long commentId) {
         commentRepository.deleteById(commentId);
     }
 
+
+    //toResponse로 다 처리 해줌.
     private CommentResponse toResponse(Comment comment) {
         return CommentResponse.builder()
                 .commentId(comment.getId())

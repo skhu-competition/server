@@ -13,7 +13,6 @@ import server.user.domain.User;
 import server.user.domain.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -38,7 +37,6 @@ public class PostService {
                 .title(request.title())
                 .content(request.content())
                 .image(request.image())
-                .favorite(request.favorite())
                 .build();
 
         postRepository.save(post);
@@ -77,8 +75,9 @@ public class PostService {
         Category category = categoryRepository.findById(request.categoryId())
                 .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."));
 
-        post.update(request.title(), request.content(), request.image(), category, request.favorite());
+        post.update(request.title(), request.content(), request.image(), category);
         return toResponse(post);
+
     }
 
     //게시글 삭제
@@ -94,7 +93,6 @@ public class PostService {
                 .content(post.getContent())
                 .category(post.getCategory().getName())
                 .image(post.getImage())
-                .favorite(post.isFavorite())
                 .createdAt(post.getCreatedAt().toString())
                 .updateAt(post.getUpdateAt().toString())
                 .build();

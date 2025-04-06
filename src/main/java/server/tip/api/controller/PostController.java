@@ -3,6 +3,7 @@ package server.tip.api.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import server.tip.api.dto.request.FatchRequest;
 import server.tip.api.dto.request.PostRequest;
 import server.tip.api.dto.response.PostResponse;
 import server.tip.application.PostService;
@@ -44,7 +45,7 @@ public class PostController {
     @PatchMapping("/{postId}")
     public PostResponse updatePost(
             @PathVariable Long postId,
-            @RequestBody PostRequest request) {
+            @RequestBody FatchRequest request) {
         return postService.update(postId, request);
     }
 

@@ -60,10 +60,9 @@ public class Post {
         this.image = image;
     }
 
-    public void update(String title, String content, String image, Category category) {
+    public void update(String title, String content, String image) {
         this.title = title;
         this.content = content;
         this.image = image;
-        this.category = category;
     }
 }

@@ -3,6 +3,7 @@ package server.tip.application;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import server.tip.api.dto.request.FatchRequest;
 import server.tip.api.dto.request.PostRequest;
 import server.tip.api.dto.response.PostResponse;
 import server.tip.domain.Category;
@@ -69,13 +70,11 @@ public class PostService {
 
     //게시글 수정
     @Transactional
-    public PostResponse update(Long postId, PostRequest request) {
+    public PostResponse update(Long postId, FatchRequest request) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
-        Category category = categoryRepository.findById(request.categoryId())
-                .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."));
 
-        post.update(request.title(), request.content(), request.image(), category);
+        post.update(request.title(), request.content(), request.image());
         return toResponse(post);
 
     }

@@ -33,7 +33,7 @@ public class KakaoService {
                         .path("/oauth/token")
                         .queryParam("grant_type", "authorization_code")
                         .queryParam("client_id", KAKAO_CLIENT_ID)
-                        .queryParam("redirect_uri", "http://localhost:3000/oauth/kakao") // 나중에 배포 주소로 변경해야함
+                        .queryParam("redirect_uri", "http://localhost:8080/auth/kakao") // 나중에 배포 주소로 변경해야함
                         .queryParam("code", code)
                         .build(true))
                 .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())

@@ -31,6 +31,11 @@ spring:
     client_id: ${naver.client_id}
     secret: ${naver.secret}
 
+  google:
+    client-id: ${GOOGLE_CLIENT_ID}
+    client-secret: ${GOOGLE_CLIENT_SECRET}
+    redirect-uri: ${GOOGLE_REDIRECT_URI}
+
   jwt:
     secret: ${jwt.secret}
     access-token-validity-in-milliseconds: ${jwt.access-token-validity-in-milliseconds}

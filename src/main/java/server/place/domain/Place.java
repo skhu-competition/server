@@ -7,6 +7,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
+import server.placeReview.domain.PlaceReview;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "place")
@@ -32,6 +36,16 @@ public class Place {
 
     @Column(name = "MAPY", nullable = false)
     private double mapy;  // 경도
+
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PlaceReview> reviews = new ArrayList<>();
+
+    public double getAverageRating() {
+        return reviews.stream()
+                .mapToInt(PlaceReview::getRating)
+                .average()
+                .orElse(0.0);
+    }
 
     @Builder
     public Place(String name, String address, String description, double mapx, double mapy) {

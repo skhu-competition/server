@@ -5,9 +5,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.place.api.dto.response.NaverSearchResponse;
-import server.place.api.dto.response.PlaceListResDto;
-import server.place.api.dto.response.PlaceResDto;
+import server.place.api.dto.response.*;
 import server.place.domain.Place;
 import server.place.domain.repository.PlaceRepository;
 
@@ -17,6 +15,8 @@ import java.util.List;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlaceService {
     private final PlaceRepository placeRepository;
+
+
     private final NaverSearchService naverSearchService;
 
     // 장소 저장
@@ -91,5 +91,14 @@ public class PlaceService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 장소를 찾을 수 없습니다. id=" + placeId));
 
         return PlaceResDto.from(place);
+    }
+
+    // top 5 장소 조회
+    @Transactional(readOnly = true)
+    public List<PlaceResDtoForTop> getTop5ByAverageRating() {
+        return placeRepository.findTop5ByAverageRating().stream()
+                .limit(5)
+                .map(PlaceResDtoForTop::from)
+                .toList();
     }
 }

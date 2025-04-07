@@ -14,7 +14,7 @@ import server.user.domain.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserLogInService {
+public class UserAuthService {
     private final UserRepository userRepository;
     private final UserRefreshTokenRepository userRefreshTokenRepository;
 
@@ -81,5 +81,13 @@ public class UserLogInService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    @Transactional
+    public void logout(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자를 찾을 수 없습니다."));
+
+        userRefreshTokenRepository.deleteByUserImmediate(user);
     }
 }

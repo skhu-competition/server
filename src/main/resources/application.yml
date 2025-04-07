@@ -1,16 +1,16 @@
 spring:
 
   datasource:
-    url: ${spring.datasource.url}
-    username: ${spring.datasource.username}
-    password: ${spring.datasource.password}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
@@ -24,12 +24,12 @@ spring:
       max-request-size: 10MB
 
   kakao:
-    client_id: ${kakao.client_id}
+    client_id: ${KAKAO_CLIENT_ID}
     redirect_uri: https://nowskhu.zapto.org/auth/kakao
 
   naver:
-    client_id: ${naver.client_id}
-    secret: ${naver.secret}
+    client_id: ${NAVER_CLIENT_ID}
+    secret: ${NAVER_SECRET}
 
   google:
     client-id: ${GOOGLE_CLIENT_ID}
@@ -38,5 +38,5 @@ spring:
 
   jwt:
     secret: ${jwt.secret}
-    access-token-validity-in-milliseconds: ${jwt.access-token-validity-in-milliseconds}
-    refresh-token-validity-in-milliseconds: ${jwt.refresh-token-validity-in-milliseconds}
+    access-token-validity-in-milliseconds: ${JWT_ACCESS_TOKEN_VALIDITY_IN_MILLISECONDS}
+    refresh-token-validity-in-milliseconds: ${JWT_REFRESH_TOKEN_VALIDITY_IN_MILLISECONDS}

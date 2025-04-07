@@ -31,9 +31,9 @@ public class PlaceService {
     @Transactional
     public void saveInitialPlaces() {
         Map<String, String> placesToAdd = Map.of(
-                "앤드아워", "감성적인 분위기의 디저트 카페",
-                "스시민", "신선한 재료로 만드는 정통 스시 맛집",
-                "곱창시대 인천", "매콤한 곱창과 볶음밥이 인기인 맛집"
+                "다원국수", "국수 맛집",
+                "국수나무 성공회대", "새천년곤 지하 1층 학식당",
+                "앤드아워", "분위기 좋은 카페"
         );
 
         for (Map.Entry<String, String> entry : placesToAdd.entrySet()) {

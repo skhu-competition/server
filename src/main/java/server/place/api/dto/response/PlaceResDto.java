@@ -10,7 +10,9 @@ public record PlaceResDto(
         String address,
         String description,
         double mapx,
-        double mapy
+        double mapy,
+        int averageRating
+
 ) {
     public static PlaceResDto from(Place place) {
         return PlaceResDto.builder()
@@ -20,6 +22,7 @@ public record PlaceResDto(
                 .description(place.getDescription())
                 .mapx(place.getMapx())
                 .mapy(place.getMapy())
+                .averageRating((int) Math.round(place.getAverageRating()))
                 .build();
     }
 }

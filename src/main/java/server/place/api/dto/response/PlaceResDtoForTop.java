@@ -11,7 +11,7 @@ public record PlaceResDtoForTop(
         String description,
         double mapx,
         double mapy,
-        double averageRating
+        int averageRating
 ) {
     public static PlaceResDtoForTop from(Place place) {
         return PlaceResDtoForTop.builder()
@@ -21,7 +21,7 @@ public record PlaceResDtoForTop(
                 .description(place.getDescription())
                 .mapx(place.getMapx())
                 .mapy(place.getMapy())
-                .averageRating(place.getAverageRating())
+                .averageRating((int) Math.round(place.getAverageRating()))
                 .build();
     }
 }

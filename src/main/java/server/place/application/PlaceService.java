@@ -10,6 +10,7 @@ import server.place.domain.Place;
 import server.place.domain.repository.PlaceRepository;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,16 +30,18 @@ public class PlaceService {
 
     @Transactional
     public void saveInitialPlaces() {
-        List<String> addressList = List.of(
-                // 예시입니다.
-                "앤드아워",
-                "스시민",
-                "곱창시대 인천"
+        Map<String, String> placesToAdd = Map.of(
+                "앤드아워", "감성적인 분위기의 디저트 카페",
+                "스시민", "신선한 재료로 만드는 정통 스시 맛집",
+                "곱창시대 인천", "매콤한 곱창과 볶음밥이 인기인 맛집"
         );
 
-        for (String address : addressList) {
-            System.out.println("[debug] 검색할 주소: " + address);
-            NaverSearchResponse response = naverSearchService.searchPlace(address);
+        for (Map.Entry<String, String> entry : placesToAdd.entrySet()) {
+            String query = entry.getKey();
+            String manualDescription = entry.getValue();
+
+            System.out.println("[debug] 검색할 주소: " + query);
+            NaverSearchResponse response = naverSearchService.searchPlace(query);
             System.out.println("[debug] 검색 결과 개수: " + response.getItems().size());
             if (response.getItems().isEmpty()) continue;
 
@@ -54,11 +57,9 @@ public class PlaceService {
                 Place place = Place.builder()
                         .name(stripHtml(item.getTitle()))
                         .address(item.getRoadAddress())
-                        .description(item.getDescription() != null && !item.getDescription().isBlank()
-                                ? item.getDescription()
-                                : "설명이 제공되지 않았습니다.")
-                        .mapx(Double.parseDouble(item.getMapx())/10000000)
-                        .mapy(Double.parseDouble(item.getMapy())/10000000)
+                        .description(manualDescription)
+                        .mapx(Double.parseDouble(item.getMapx()) / 10000000)
+                        .mapy(Double.parseDouble(item.getMapy()) / 10000000)
                         .build();
 
                 placeRepository.save(place);
@@ -69,6 +70,7 @@ public class PlaceService {
             }
         }
     }
+
 
     private String stripHtml(String html) {
         return html.replaceAll("<[^>]*>", ""); // HTML 태그 제거

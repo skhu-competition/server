@@ -1,18 +1,16 @@
 package server.mypage.application;
 
+import server.favoritePost.api.dto.FavoritePostResDto;
+import server.favoritePost.domain.FavoritePost;
+import server.favoritePost.domain.repository.FavoritePostRepository;
 import server.placeReview.domain.repository.PlaceReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.favoritePlace.api.response.FavoritePlaceResDto;
-import server.favoritePlace.domain.FavoritePlace;
-import server.favoritePlace.domain.repository.FavoritePlaceRepository;
 import server.mypage.api.dto.response.MypageResponse;
-import server.place.domain.repository.PlaceRepository;
 import server.placeReview.api.response.PlaceReviewResDto;
 import server.tip.api.dto.response.PostResponse;
 import server.tip.domain.repository.PostRepository;
-import server.user.api.dto.request.UserInfo;
 import server.user.domain.User;
 import server.user.domain.repository.UserRepository;
 import java.util.List;
@@ -24,7 +22,7 @@ public class MypageService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final PlaceReviewRepository placeReviewRepository;
-    private final FavoritePlaceRepository favoritePlaceRepository;
+    private final FavoritePostRepository favoritePostRepository;
 
     //유저 정보 조회
     @Transactional(readOnly = true)
@@ -53,14 +51,14 @@ public class MypageService {
 
     }*/
 
-    //장소 즐겨찾기
-    @Transactional(readOnly = true)
-    public List<FavoritePlaceResDto> getFavorites(Long userId) {
-        List<FavoritePlace> favorites = favoritePlaceRepository.findAllByUser_UserId(userId);
-        return favorites.stream()
-                .map(f -> FavoritePlaceResDto.from(f, "조회"))
-                .toList();
-    }
+//    //장소 즐겨찾기
+//    @Transactional(readOnly = true)
+//    public List<FavoritePlaceResDto> getFavorites(Long userId) {
+//        List<FavoritePlace> favorites = favoritePlaceRepository.findAllByUser_UserId(userId);
+//        return favorites.stream()
+//                .map(f -> FavoritePlaceResDto.from(f, "조회"))
+//                .toList();
+//    }
 
     // 사용자가 직접 작성한 게시글 조회
     @Transactional(readOnly = true)
@@ -90,6 +88,15 @@ public class MypageService {
                         .createdAt(r.getCreatedAt())
                         .modifiedAt(r.getModifiedAt())
                         .build())
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<FavoritePostResDto> getMyFavorites(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+
+        return favoritePostRepository.findAllByUser(user).stream()
+                .map(f -> FavoritePostResDto.from(f, "조회"))
                 .toList();
     }
 }

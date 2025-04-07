@@ -1,5 +1,6 @@
 package server.place.api.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class NaverSearchResponse {
         private String title;
         private String link;
         private String category;
+        @JsonProperty("description")
         private String description;
         private String telephone;
         private String address;

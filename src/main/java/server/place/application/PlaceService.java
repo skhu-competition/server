@@ -54,7 +54,9 @@ public class PlaceService {
                 Place place = Place.builder()
                         .name(stripHtml(item.getTitle()))
                         .address(item.getRoadAddress())
-                        .description(item.getDescription())
+                        .description(item.getDescription() != null && !item.getDescription().isBlank()
+                                ? item.getDescription()
+                                : "설명이 제공되지 않았습니다.")
                         .mapx(Double.parseDouble(item.getMapx())/10000000)
                         .mapy(Double.parseDouble(item.getMapy())/10000000)
                         .build();

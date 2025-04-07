@@ -5,10 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.favoritePost.api.dto.FavoritePostResDto;
 import server.favoritePost.application.FavoritePostService;
-import java.util.List;
 
 @RestController
-@RequestMapping("/tip/post")
+@RequestMapping("/tip/favorite")
 @RequiredArgsConstructor
 public class FavoritePostController {
 
@@ -29,11 +28,5 @@ public class FavoritePostController {
             @PathVariable Long postId) {
         favoritePostService.removeFavorite(userId, postId);
         return ResponseEntity.noContent().build();
-    }
-
-    // 즐겨찾기 목록
-    @GetMapping("/list")
-    public ResponseEntity<List<FavoritePostResDto>> getMyFavorites(@RequestParam Long userId) {
-        return ResponseEntity.ok(favoritePostService.getMyFavorites(userId));
     }
 }

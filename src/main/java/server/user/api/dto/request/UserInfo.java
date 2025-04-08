@@ -5,6 +5,6 @@ import lombok.Builder;
 @Builder
 public record UserInfo(
         String email,
-        String nickname,
+        String name,
         String profileImageUrl
 ) {}

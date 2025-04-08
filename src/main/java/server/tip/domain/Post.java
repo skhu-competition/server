@@ -34,9 +34,6 @@ public class Post {
     @Column(name = "post_image")
     private String image; //사진
 
-    @Column(name="post_favorite")
-    private boolean favorite;  // 즐겨찾기
-
     @Column(name="post_create_at", nullable = false)
     private LocalDateTime createdAt; //작성일
 
@@ -61,14 +58,11 @@ public class Post {
         this.title = title;
         this.content = content;
         this.image = image;
-        this.favorite = favorite;
     }
 
-    public void update(String title, String content, String image, Category category, boolean favorite) {
+    public void update(String title, String content, String image) {
         this.title = title;
         this.content = content;
         this.image = image;
-        this.category = category;
-        this.favorite = favorite;
     }
 }

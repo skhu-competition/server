@@ -5,18 +5,19 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.place.api.dto.response.NaverSearchResponse;
-import server.place.api.dto.response.PlaceListResDto;
-import server.place.api.dto.response.PlaceResDto;
+import server.place.api.dto.response.*;
 import server.place.domain.Place;
 import server.place.domain.repository.PlaceRepository;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlaceService {
     private final PlaceRepository placeRepository;
+
+
     private final NaverSearchService naverSearchService;
 
     // 장소 저장
@@ -29,16 +30,18 @@ public class PlaceService {
 
     @Transactional
     public void saveInitialPlaces() {
-        List<String> addressList = List.of(
-                // 예시입니다.
-                "앤드아워",
-                "스시민",
-                "곱창시대 인천"
+        Map<String, String> placesToAdd = Map.of(
+                "다원국수", "국수 맛집",
+                "국수나무 성공회대", "새천년곤 지하 1층 학식당",
+                "앤드아워", "분위기 좋은 카페"
         );
 
-        for (String address : addressList) {
-            System.out.println("[debug] 검색할 주소: " + address);
-            NaverSearchResponse response = naverSearchService.searchPlace(address);
+        for (Map.Entry<String, String> entry : placesToAdd.entrySet()) {
+            String query = entry.getKey();
+            String manualDescription = entry.getValue();
+
+            System.out.println("[debug] 검색할 주소: " + query);
+            NaverSearchResponse response = naverSearchService.searchPlace(query);
             System.out.println("[debug] 검색 결과 개수: " + response.getItems().size());
             if (response.getItems().isEmpty()) continue;
 
@@ -54,9 +57,9 @@ public class PlaceService {
                 Place place = Place.builder()
                         .name(stripHtml(item.getTitle()))
                         .address(item.getRoadAddress())
-                        .description(item.getDescription())
-                        .mapx(Double.parseDouble(item.getMapx())/10000000)
-                        .mapy(Double.parseDouble(item.getMapy())/10000000)
+                        .description(manualDescription)
+                        .mapx(Double.parseDouble(item.getMapx()) / 10000000)
+                        .mapy(Double.parseDouble(item.getMapy()) / 10000000)
                         .build();
 
                 placeRepository.save(place);
@@ -67,6 +70,7 @@ public class PlaceService {
             }
         }
     }
+
 
     private String stripHtml(String html) {
         return html.replaceAll("<[^>]*>", ""); // HTML 태그 제거
@@ -91,5 +95,14 @@ public class PlaceService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 장소를 찾을 수 없습니다. id=" + placeId));
 
         return PlaceResDto.from(place);
+    }
+
+    // top 5 장소 조회
+    @Transactional(readOnly = true)
+    public List<PlaceResDtoForTop> getTop5ByAverageRating() {
+        return placeRepository.findTop5ByAverageRating().stream()
+                .limit(5)
+                .map(PlaceResDtoForTop::from)
+                .toList();
     }
 }

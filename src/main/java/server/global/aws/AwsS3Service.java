@@ -9,9 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,48 +22,39 @@ public class AwsS3Service {
 
     private final AmazonS3 amazonS3;
 
-    public AwsS3DTO uploadFile(MultipartFile multipartFile){
-
+    // 업로드
+    public AwsS3DTO uploadFile(MultipartFile multipartFile) {
         if (multipartFile == null || multipartFile.isEmpty()) {
-            return null;
+            throw new IllegalArgumentException("업로드할 파일이 없습니다.");
         }
 
-        String fileName = multipartFile.getOriginalFilename();
+        String originalFileName = multipartFile.getOriginalFilename();
+        String uniqueFileName = UUID.randomUUID() + "_" + originalFileName;
 
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(multipartFile.getSize());
-        objectMetadata.setContentType(multipartFile.getContentType());
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(multipartFile.getSize());
+        metadata.setContentType(multipartFile.getContentType());
 
-        try(InputStream inputStream = multipartFile.getInputStream()){
-            amazonS3.putObject(bucket, fileName, inputStream, objectMetadata);
-        } catch (IOException e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            amazonS3.putObject(bucket, uniqueFileName, inputStream, metadata);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "S3 업로드 실패");
         }
-        String url = amazonS3.getUrl(bucket, fileName).toString();
+
+        String fileUrl = amazonS3.getUrl(bucket, uniqueFileName).toString();
+
         return AwsS3DTO.builder()
-                .fileName(fileName)
-                .fileUrl(url)
+                .fileName(uniqueFileName)
+                .fileUrl(fileUrl)
                 .build();
     }
 
-    // 파일명 난수화(추후 수정)
-//    public String createFileName(String fileName) {
-//        return UUID.randomUUID().toString().concat(getFileExtension(fileName));
-//    }
-
-    // "."의 존재 유무만 판단
-//    private String getFileExtension(String fileName) {
-//        try{
-//            return fileName.substring(fileName.lastIndexOf("."));
-//        } catch (StringIndexOutOfBoundsException e){
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ") 입니다.");
-//        }
-//    }
-
+    // 삭제
     public void deleteFile(String fileName) {
-        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
-        System.out.println(bucket);
+        if (amazonS3.doesObjectExist(bucket, fileName)) {
+            amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "파일을 찾을 수 없습니다.");
+        }
     }
 }
-
-

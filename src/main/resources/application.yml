@@ -25,7 +25,7 @@ spring:
 
   kakao:
     client_id: ${KAKAO_CLIENT_ID}
-    redirect_uri: https://nowskhu.zapto.org/auth/kakao
+    redirect_uri: http://localhost:8080/auth/kakao
 
   naver:
     client_id: ${NAVER_CLIENT_ID}
@@ -54,3 +54,12 @@ spring:
         auto: false
     access-token-validity-in-milliseconds: ${JWT_ACCESS_TOKEN_VALIDITY_IN_MILLISECONDS}
     refresh-token-validity-in-milliseconds: ${JWT_REFRESH_TOKEN_VALIDITY_IN_MILLISECONDS}
+
+  aws:
+    region:
+      static: ${AWS_REGION}
+    s3:
+      bucket: ${BUCKET_NAME}
+    credentials:
+      accessKey: ${BUCKET_ACCESS}
+      secretKey: ${BUCKET_SECRET}

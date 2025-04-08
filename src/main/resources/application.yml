@@ -25,7 +25,7 @@ spring:
 
   kakao:
     client_id: ${KAKAO_CLIENT_ID}
-    redirect_uri: http://localhost:8080/auth/kakao
+    redirect_uri: https://nowskhu.zapto.org/auth/kakao
 
   naver:
     client_id: ${NAVER_CLIENT_ID}

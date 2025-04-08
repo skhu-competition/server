@@ -94,6 +94,7 @@ public class PostService {
                 .image(post.getImage())
                 .createdAt(post.getCreatedAt().toString())
                 .updateAt(post.getUpdateAt().toString())
+                .userName(post.getUser().getName())
                 .build();
     }
 }

@@ -4,6 +4,7 @@ import lombok.Builder;
 @Builder
 public record PostResponse(
         Long postId,
+        String userName,
         String title,
         String content,
         String category,
@@ -11,4 +12,5 @@ public record PostResponse(
         String createdAt,
         String updateAt,
         boolean favorite
+
 ) {}

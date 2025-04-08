@@ -14,7 +14,7 @@ public class AwsS3Config {
     private String accessKey;
     @Value("${BUCKET_SECRET}")
     private String secretKey;
-    @Value("${BUCKET_REGION}")
+    @Value("${AWS_REGION}")
     private String region;
 
     @Bean

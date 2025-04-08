@@ -25,13 +25,11 @@ public class PostController {
         return postService.create(userPrincipal.getUser().getUserId(), request);
     }
 
-    // 게시글 전체 또는 카테고리별 조회
+    // 카테고리별 게시글 전체 조회
     @GetMapping("/categories/{categoryId}")
-    public List<PostResponse> getPosts(Long categoryId) {
-        if (categoryId != null) {
-            return postService.getByCategory(categoryId);
-        }
-        return postService.getAll();
+    public List<PostResponse> getPosts(@PathVariable Long categoryId) {
+
+        return postService.getByCategory(categoryId);
     }
 
     // 게시글 상세 조회

@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class AwsS3Config {
-    @Value("${spring.aws.credentials.accessKey}")
+    @Value("${BUCKET_ACCESS}")
     private String accessKey;
-    @Value("${spring.aws.credentials.secretKey}")
+    @Value("${BUCKET_SECRET}")
     private String secretKey;
-    @Value("${spring.aws.region.static}")
+    @Value("${BUCKET_REGION}")
     private String region;
 
     @Bean

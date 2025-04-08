@@ -57,7 +57,7 @@ spring:
 
   aws:
     region:
-      static: ${AWS_REGION}
+      static: ${AWS_REGION} #aws s3는 AWS_REGION을 사용해야함.
     s3:
       bucket: ${BUCKET_NAME}
     credentials:

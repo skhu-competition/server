@@ -37,6 +37,15 @@ spring:
     redirect-uri: ${GOOGLE_REDIRECT_URI}
 
   jwt:
-    secret: ${jwt.secret}
+    secret: ${JWT_SECRET}
     access-token-validity-in-milliseconds: ${JWT_ACCESS_TOKEN_VALIDITY_IN_MILLISECONDS}
     refresh-token-validity-in-milliseconds: ${JWT_REFRESH_TOKEN_VALIDITY_IN_MILLISECONDS}
+
+  aws:
+    region:
+      static: ${AWS_REGION} #aws s3는 AWS_REGION을 사용해야함.
+    s3:
+      bucket: ${BUCKET_NAME}
+    credentials:
+      accessKey: ${BUCKET_ACCESS}
+      secretKey: ${BUCKET_SECRET}

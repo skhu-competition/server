@@ -33,7 +33,7 @@ public class KakaoService {
                         .path("/oauth/token")
                         .queryParam("grant_type", "authorization_code")
                         .queryParam("client_id", KAKAO_CLIENT_ID)
-                        .queryParam("redirect_uri", "nowskhu.zapto.org/auth/kakao") // 나중에 프론트 배포 주소로 변경해야함, 서버 배포주소 아님 ㅠㅠㅠㅠㅠ
+                        .queryParam("redirect_uri", "https://nowskhu.zapto.org/auth/kakao") // 나중에 프론트 배포 주소로 변경해야함, 서버 배포주소 아님 ㅠㅠㅠㅠㅠ
                         .queryParam("code", code)
                         .build(true))
                 .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())

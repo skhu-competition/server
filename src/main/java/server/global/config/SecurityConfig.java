@@ -35,8 +35,8 @@ public class SecurityConfig {
                 .logout(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(
-                                "/oauth2/**",               // 소셜 로그인 관련 엔드포인트 허용
-                                "/login/**",                // 로그인 경로 허용
+                                "/auth/**",               // 소셜 로그인 관련 엔드포인트 허용
+                                "/logOut",                // 로그아웃 경로 허용
                                 "/swagger-ui/**",           // Swagger UI 허용
                                 "/v3/api-docs/**",          // Swagger 문서 허용
                                 "/**",                        // 루트 경로 허용 (필요시)
@@ -52,7 +52,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*"));
+        configuration.setAllowedOriginPatterns(List.of(
+                "https://front-ruby-eta.vercel.app",
+                "http://localhost:3000"
+                ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type", "X-Requested-With", "Origin", "Accept"));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "Set-Cookie"));

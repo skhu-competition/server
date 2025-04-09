@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import server.place.api.dto.request.PlaceAddRequest;
 import server.place.api.dto.response.*;
 import server.place.domain.Place;
 import server.place.domain.repository.PlaceRepository;
@@ -32,8 +33,7 @@ public class PlaceService {
     public void saveInitialPlaces() {
         Map<String, String> placesToAdd = Map.of(
                 "다원국수", "국수 맛집",
-                "국수나무 성공회대", "새천년곤 지하 1층 학식당",
-                "앤드아워", "분위기 좋은 카페"
+                "국수나무 성공회대", "새천년관 지하 1층 학식당"
         );
 
         for (Map.Entry<String, String> entry : placesToAdd.entrySet()) {
@@ -104,5 +104,41 @@ public class PlaceService {
                 .limit(5)
                 .map(PlaceResDtoForTop::from)
                 .toList();
+    }
+
+    public PlaceResDto postPlace(PlaceAddRequest placeAddRequest) {
+        String query = placeAddRequest.placeName();
+        String manualDescription = placeAddRequest.description();
+
+        System.out.println("[debug] 검색할 주소: " + query);
+        NaverSearchResponse response = naverSearchService.searchPlace(query);
+        System.out.println("[debug] 검색 결과 개수: " + response.getItems().size());
+        if (response.getItems().isEmpty()) return null;
+
+        NaverSearchResponse.Item item = response.getItems().get(0);
+
+        // 중복 저장 방지
+        if (placeRepository.findByAddress(item.getRoadAddress()).isPresent()) {
+            System.out.println("[debug] 이미 저장된 주소: " + item.getRoadAddress());
+        }
+
+        try {
+            Place place = Place.builder()
+                    .name(stripHtml(item.getTitle()))
+                    .address(item.getRoadAddress())
+                    .description(manualDescription)
+                    .mapx(Double.parseDouble(item.getMapx()) / 10000000)
+                    .mapy(Double.parseDouble(item.getMapy()) / 10000000)
+                    .build();
+
+            placeRepository.save(place);
+            System.out.println("[debug] 저장 완료: " + place.getName());
+
+            return PlaceResDto.from(place);
+        } catch (Exception e) {
+            System.out.println("[error] 저장 실패: " + item.getTitle());
+            e.printStackTrace();
+        }
+        return null;
     }
 }

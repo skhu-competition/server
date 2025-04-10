@@ -1,6 +1,7 @@
 package server.tip.api.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import server.tip.api.dto.request.FatchRequest;
@@ -49,10 +50,10 @@ public class PostController {
 
     // 게시글 삭제
     @DeleteMapping("/{postId}")
-    public void deletePost(
+    public ResponseEntity<Void> deletePost(
             @AuthenticationPrincipal UserPrincipal userPrincipal, // 로그인한 유저 정보 가져오기
             @PathVariable Long postId) {
 
-        postService.delete(userPrincipal.getUser().getUserId(), postId);
+        return postService.delete(userPrincipal.getUser().getUserId(), postId);
     }
 }

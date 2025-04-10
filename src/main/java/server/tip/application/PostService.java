@@ -1,6 +1,7 @@
 package server.tip.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.tip.api.dto.request.FatchRequest;
@@ -81,16 +82,18 @@ public class PostService {
 
     //게시글 삭제
     @Transactional
-    public void delete(Long userId, Long postId) {
+    public ResponseEntity<Void> delete(Long userId, Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 
         if (!post.getUser().getUserId().equals(userId)) {  // 작성자 체크
-            throw new IllegalArgumentException("게시글 삭제 권한이 없습니다.");
+            return ResponseEntity.status(403).build();
         }
 
         postRepository.delete(post);
+        return ResponseEntity.ok().build();
     }
+
     private PostResponse toResponse(Post post) {
         return PostResponse.builder()
                 .postId(post.getId())

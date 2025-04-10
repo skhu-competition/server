@@ -12,7 +12,7 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByPostId(Long postId);
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query("delete from Comment c where c.post = :post")
     void deleteByPost(@Param("post") Post post);
 }

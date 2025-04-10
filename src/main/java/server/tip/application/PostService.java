@@ -10,6 +10,7 @@ import server.tip.api.dto.response.PostResponse;
 import server.tip.domain.Category;
 import server.tip.domain.Post;
 import server.tip.domain.repository.CategoryRepository;
+import server.tip.domain.repository.CommentRepository;
 import server.tip.domain.repository.PostRepository;
 import server.user.domain.User;
 import server.user.domain.repository.UserRepository;
@@ -24,6 +25,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final CommentRepository commentRepository;
 
     //게시글 작성
     @Transactional
@@ -89,8 +91,9 @@ public class PostService {
         if (!post.getUser().getUserId().equals(userId)) {  // 작성자 체크
             return ResponseEntity.status(403).build();
         }
-
+        commentRepository.deleteByPost(post);
         postRepository.delete(post);
+
         return ResponseEntity.ok().build();
     }
 

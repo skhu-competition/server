@@ -5,13 +5,16 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import server.auth_kakao.api.dto.kakaoResponse.KakaoTokenResDto;
 import server.auth_kakao.api.dto.kakaoResponse.KakaoUserInfo;
 import server.user.api.dto.request.UserInfo;
+import server.user.api.dto.response.UserInfoRes;
 import server.user.api.dto.response.UserLogInResDto;
 import server.user.application.UserAuthService;
+import server.user.domain.UserPrincipal;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -80,5 +83,8 @@ public class KakaoService {
         userAuthService.logout(userId);
     }
 
+    public UserInfoRes getUserId(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return userAuthService.getUserInfo(userPrincipal.getUser().getUserId());
+    }
 
 }

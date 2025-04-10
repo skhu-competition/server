@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.global.jwt.TokenProvider;
 import server.user.api.dto.request.UserInfo;
+import server.user.api.dto.response.UserInfoRes;
 import server.user.api.dto.response.UserLogInResDto;
 import server.user.domain.User;
 import server.user.domain.UserRefreshToken;
@@ -80,6 +81,17 @@ public class UserAuthService {
         return UserLogInResDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .build();
+    }
+
+    public UserInfoRes getUserInfo(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자를 찾을 수 없습니다."));
+
+        return UserInfoRes.builder()
+                .userId(userId)
+                .name(user.getName())
+                .email(user.getEmail())
                 .build();
     }
 

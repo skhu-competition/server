@@ -81,10 +81,16 @@ public class PostService {
 
     //게시글 삭제
     @Transactional
-    public void delete(Long postId) {
-        postRepository.deleteById(postId);
-    }
+    public void delete(Long userId, Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 
+        if (!post.getUser().getUserId().equals(userId)) {  // 작성자 체크
+            throw new IllegalArgumentException("게시글 삭제 권한이 없습니다.");
+        }
+
+        postRepository.delete(post);
+    }
     private PostResponse toResponse(Post post) {
         return PostResponse.builder()
                 .postId(post.getId())

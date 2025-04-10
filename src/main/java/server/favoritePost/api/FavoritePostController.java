@@ -2,9 +2,11 @@ package server.favoritePost.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import server.favoritePost.api.dto.FavoritePostResDto;
 import server.favoritePost.application.FavoritePostService;
+import server.user.domain.UserPrincipal;
 
 @RestController
 @RequestMapping("/tip/favorite")
@@ -29,4 +31,13 @@ public class FavoritePostController {
         favoritePostService.removeFavorite(userId, postId);
         return ResponseEntity.noContent().build();
     }
+
+    // 즐겨찾기 했는지 여부 조회
+    @GetMapping("/{postId}")
+    public ResponseEntity<Boolean> isFavorite(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable Long postId) {
+        return ResponseEntity.ok(favoritePostService.isFavorite(userPrincipal.getUser().getUserId(), postId));
+    }
+
 }

@@ -62,4 +62,18 @@ public class FavoritePostService {
                 .map(f -> FavoritePostResDto.from(f, "조회"))
                 .toList();
     }
+
+    // 즐겨찾기 햇는지 여부 조회
+    @Transactional(readOnly = true)
+    public boolean isFavorite(Long userId, Long postId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+        if (favoritePostRepository.findByUserAndPost(user, post).isPresent()) {
+            throw new IllegalArgumentException("이미 즐겨찾기한 게시글입니다.");
+        }
+
+        return favoritePostRepository.findByUserAndPost(user, post).isPresent();
+    }
 }

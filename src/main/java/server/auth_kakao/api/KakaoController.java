@@ -30,7 +30,7 @@ public class KakaoController {
         return ResponseEntity.ok("로그아웃 성공");
     }
 
-    @GetMapping
+    @GetMapping("/getuserinfo")
     public UserInfoRes getUserInfo(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         return userAuthService.getUserInfo(userPrincipal.getUser().getUserId());
     }

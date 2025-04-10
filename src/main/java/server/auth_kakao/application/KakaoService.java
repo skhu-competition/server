@@ -83,8 +83,4 @@ public class KakaoService {
         userAuthService.logout(userId);
     }
 
-    public UserInfoRes getUserId(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return userAuthService.getUserInfo(userPrincipal.getUser().getUserId());
-    }
-
 }

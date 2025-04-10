@@ -107,6 +107,7 @@ public class PostService {
                 .createdAt(post.getCreatedAt().toString())
                 .updateAt(post.getUpdateAt().toString())
                 .userName(post.getUser().getName())
+                .userId(post.getUser().getUserId())
                 .build();
     }
 }

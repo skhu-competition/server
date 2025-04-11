@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import server.tip.domain.Category;
 
 import java.time.LocalDateTime;
 
@@ -44,5 +45,9 @@ public class User {
         this.profileImage = profileImage;
     }
 
-
+    public void update(String email, String name, String profileImage) {
+        this.email=email;
+        this.name=name;
+        this.profileImage=profileImage;
+    }
 }

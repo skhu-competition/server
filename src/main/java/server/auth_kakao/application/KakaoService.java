@@ -5,13 +5,16 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import server.auth_kakao.api.dto.kakaoResponse.KakaoTokenResDto;
 import server.auth_kakao.api.dto.kakaoResponse.KakaoUserInfo;
 import server.user.api.dto.request.UserInfo;
+import server.user.api.dto.response.UserInfoRes;
 import server.user.api.dto.response.UserLogInResDto;
-import server.user.application.UserLogInService;
+import server.user.application.UserAuthService;
+import server.user.domain.UserPrincipal;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,7 +25,7 @@ public class KakaoService {
     private final String KAUTH_TOKEN_URL_HOST = "https://kauth.kakao.com"; // 액세스 토큰을 발급받기 위한 서버
     private final String KAUTH_USER_URL_HOST = "https://kapi.kakao.com"; // 사용자 정보를 받아오기 위한 서버
 
-    private final UserLogInService userLogInService;
+    private final UserAuthService userAuthService;
 
     // 인가코드를 이용해 액세스 토큰 받아오기
     public String getAccessToken(String code) {
@@ -33,7 +36,7 @@ public class KakaoService {
                         .path("/oauth/token")
                         .queryParam("grant_type", "authorization_code")
                         .queryParam("client_id", KAKAO_CLIENT_ID)
-                        .queryParam("redirect_uri", "http://localhost:3000/oauth/kakao") // 나중에 배포 주소로 변경해야함
+                        .queryParam("redirect_uri", "https://front-ruby-eta.vercel.app/oauth/kakao") // 나중에 프론트 배포 주소로 변경해야함, 서버 배포주소 아님 ㅠㅠㅠㅠㅠ
                         .queryParam("code", code)
                         .build(true))
                 .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())
@@ -73,9 +76,11 @@ public class KakaoService {
                 .profileImageUrl(userInfo.getKakaoAccount().getProfile().getProfileImageUrl())
                 .build();
 
-        return userLogInService.loginByKakao(user);
+        return userAuthService.loginByKakao(user);
     }
 
-
+    public void logout(Long userId) {
+        userAuthService.logout(userId);
+    }
 
 }

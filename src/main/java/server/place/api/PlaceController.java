@@ -2,10 +2,8 @@ package server.place.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import server.place.api.dto.request.PlaceAddRequest;
 import server.place.api.dto.response.PlaceListResDto;
 import server.place.api.dto.response.PlaceResDto;
 import server.place.api.dto.response.PlaceResDtoForTop;
@@ -34,6 +32,11 @@ public class PlaceController {
     @GetMapping("/top5")
     public ResponseEntity<List<PlaceResDtoForTop>> getTop5Places() {
         return ResponseEntity.ok(placeService.getTop5ByAverageRating());
+    }
+
+    @PostMapping
+    public ResponseEntity<PlaceResDto> createPlace(@RequestBody PlaceAddRequest placeAddRequest) {
+        return ResponseEntity.ok(placeService.postPlace(placeAddRequest));
     }
 
 }

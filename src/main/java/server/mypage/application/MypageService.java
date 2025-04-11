@@ -96,7 +96,7 @@ public class MypageService {
         User user = userRepository.findById(userId).orElseThrow();
 
         return favoritePostRepository.findAllByUser(user).stream()
-                .map(f -> FavoritePostResDto.from(f, "조회"))
+                .map(FavoritePostResDto::from)
                 .toList();
     }
 }

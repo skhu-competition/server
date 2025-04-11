@@ -11,16 +11,16 @@ public record FavoritePostResDto(
         Long userId,
         Long postId,
         String title,
-        String status,
+        String content,
         LocalDateTime createdAt
 ) {
-    public static FavoritePostResDto from(FavoritePost favoritePost, String status) {
+    public static FavoritePostResDto from(FavoritePost favoritePost) {
         return FavoritePostResDto.builder()
                 .favoritePostId(favoritePost.getId())
                 .userId(favoritePost.getUser().getUserId())
                 .postId(favoritePost.getPost().getId())
                 .title(favoritePost.getPost().getTitle())
-                .status(status)
+                .content(favoritePost.getPost().getContent())
                 .createdAt(favoritePost.getCreatedAt())
                 .build();
     }

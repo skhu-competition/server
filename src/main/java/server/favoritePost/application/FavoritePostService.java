@@ -38,7 +38,7 @@ public class FavoritePostService {
                 .build();
 
         favoritePostRepository.save(favorite);
-        return FavoritePostResDto.from(favorite, "추가됨");
+        return FavoritePostResDto.from(favorite);
     }
 
     // 즐겨찾기 삭제
@@ -59,7 +59,7 @@ public class FavoritePostService {
         User user = userRepository.findById(userId).orElseThrow();
 
         return favoritePostRepository.findAllByUser(user).stream()
-                .map(f -> FavoritePostResDto.from(f, "조회"))
+                .map(FavoritePostResDto::from)
                 .toList();
     }
 

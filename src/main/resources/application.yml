@@ -25,7 +25,7 @@ spring:
 
   kakao:
     client_id: ${KAKAO_CLIENT_ID}
-    redirect_uri: https://front-ruby-eta.vercel.app/oauth/google
+    redirect_uri: http://localhost:3000/oauth/google
 
   naver:
     client_id: ${NAVER_CLIENT_ID}

@@ -25,7 +25,7 @@ spring:
 
   kakao:
     client_id: ${KAKAO_CLIENT_ID}
-    redirect_uri: http://localhost:3000/oauth/google
+    redirect_uri: ${KAKAO_REDIRECT_URI}
 
   naver:
     client_id: ${NAVER_CLIENT_ID}

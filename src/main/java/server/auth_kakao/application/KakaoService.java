@@ -22,6 +22,9 @@ public class KakaoService {
     @Value("${spring.kakao.client_id}")
     private String KAKAO_CLIENT_ID;
 
+    @Value("${spring.kakao.redirect_uri}")
+    private String KAKAO_REDIRECT_URI;
+
     private final String KAUTH_TOKEN_URL_HOST = "https://kauth.kakao.com"; // 액세스 토큰을 발급받기 위한 서버
     private final String KAUTH_USER_URL_HOST = "https://kapi.kakao.com"; // 사용자 정보를 받아오기 위한 서버
 
@@ -36,7 +39,7 @@ public class KakaoService {
                         .path("/oauth/token")
                         .queryParam("grant_type", "authorization_code")
                         .queryParam("client_id", KAKAO_CLIENT_ID)
-                        .queryParam("redirect_uri", "http://localhost:3000/oauth/kakao") // 나중에 프론트 배포 주소로 변경해야함, 서버 배포주소 아님 ㅠㅠㅠㅠㅠ
+                        .queryParam("redirect_uri", "https://front-ruby-eta.vercel.app/oauth/kakao") // 나중에 프론트 배포 주소로 변경해야함, 서버 배포주소 아님 ㅠㅠㅠㅠㅠ
                         .queryParam("code", code)
                         .build(true))
                 .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())

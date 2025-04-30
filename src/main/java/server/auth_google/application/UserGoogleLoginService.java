@@ -42,9 +42,10 @@ public class UserGoogleLoginService {
     }
 
     @Transactional
-    public GoogleTokenDto loginOrSignUp(String code) {
-        String googleAccesstoken = exchangeAuthCodeForAccessToken(code);
-        GoogleMappingUserDto googleUser = getGoogleUserInfo(googleAccesstoken);
+    public GoogleTokenDto loginOrSignUp(String accessToken) {
+//        String googleAccesstoken = exchangeAuthCodeForAccessToken(code);
+//        GoogleMappingUserDto googleUser = getGoogleUserInfo(googleAccesstoken);
+        GoogleMappingUserDto googleUser = getGoogleUserInfo(accessToken);
 
         User user = userRepository.findByEmail(googleUser.getEmail())
                 .orElseGet(() -> {
@@ -56,11 +57,11 @@ public class UserGoogleLoginService {
                     return userRepository.save(newUser);
                 });
 
-        String accessToken = tokenProvider.createAccessToken(user);
+        String newAccessToken = tokenProvider.createAccessToken(user);
         String refreshToken = tokenProvider.createRefreshToken(user);
 
         return GoogleTokenDto.builder()
-                .accessToken(accessToken)
+                .accessToken(newAccessToken)
                 .refreshToken(refreshToken)
                 .build();
     }
@@ -89,35 +90,35 @@ public class UserGoogleLoginService {
         throw new RuntimeException("구글 사용자 정보를 가져오는 데 실패했습니다.");
     }
 
-    public String exchangeAuthCodeForAccessToken(String code) {
-        RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "authorization_code");
-        params.add("code", code);
-        params.add("client_id", GOOGLE_CLIENT_ID);
-        params.add("client_secret", GOOGLE_CLIENT_SECRET);
-        params.add("redirect_uri", GOOGLE_REDIRECT_URI); // 환경변수 나중에 배포 주소로 변경해야함
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-
-        ResponseEntity<String> response = restTemplate.postForEntity(
-                "https://oauth2.googleapis.com/token",
-                request,
-                String.class
-        );
-
-        if (response.getStatusCode().is2xxSuccessful()) {
-            // 3) JSON에서 access_token 추출
-            //    (이 예시에선 Gson이나 Jackson 등을 사용)
-            Gson gson = new Gson();
-            JsonObject jsonObj = gson.fromJson(response.getBody(), JsonObject.class);
-            return jsonObj.get("access_token").getAsString();
-        } else {
-            throw new RuntimeException("구글 OAuth 토큰 교환에 실패했습니다. " + response.getStatusCode());
-        }
-    }
+//    public String exchangeAuthCodeForAccessToken(String code) {
+//        RestTemplate restTemplate = new RestTemplate();
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//
+//        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+//        params.add("grant_type", "authorization_code");
+//        params.add("code", code);
+//        params.add("client_id", GOOGLE_CLIENT_ID);
+//        params.add("client_secret", GOOGLE_CLIENT_SECRET);
+//        params.add("redirect_uri", GOOGLE_REDIRECT_URI); // 환경변수 나중에 배포 주소로 변경해야함
+//
+//        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+//
+//        ResponseEntity<String> response = restTemplate.postForEntity(
+//                "https://oauth2.googleapis.com/token",
+//                request,
+//                String.class
+//        );
+//
+//        if (response.getStatusCode().is2xxSuccessful()) {
+//            // 3) JSON에서 access_token 추출
+//            //    (이 예시에선 Gson이나 Jackson 등을 사용)
+//            Gson gson = new Gson();
+//            JsonObject jsonObj = gson.fromJson(response.getBody(), JsonObject.class);
+//            return jsonObj.get("access_token").getAsString();
+//        } else {
+//            throw new RuntimeException("구글 OAuth 토큰 교환에 실패했습니다. " + response.getStatusCode());
+//        }
+//    }
 }
